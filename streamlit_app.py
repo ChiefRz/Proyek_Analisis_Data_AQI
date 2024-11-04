@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
 import folium
+from streamlit_folium import st_folium
 
 
 # Membaca data
