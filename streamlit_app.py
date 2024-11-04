@@ -3,8 +3,6 @@ import pandas as pd
 import folium
 import streamlit as st
 
-from streamlit_folium import st_folium
-
 # Membaca data
 all_data = pd.read_csv('all_data/data_grouped.csv')
 aqi_data = pd.read_csv('all_data/AQI_df.csv')
