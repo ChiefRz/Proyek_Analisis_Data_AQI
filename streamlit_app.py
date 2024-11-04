@@ -24,13 +24,11 @@ tahun = st.sidebar.selectbox("Pilih Tahun", df_aqi['year'].unique())
 filtered_data = df_aqi[(df_aqi['station'] == stasiun) & (df_aqi['year'] == tahun)]
 
 # Menampilkan data
-st.title("Data Stasiun")
-st.write(f"Data untuk {stasiun} pada tahun {tahun}:")
+st.title("Air Quality Index")
+st.write(f"Pada stasiun {stasiun} di tahun {tahun}:")
 st.write(filtered_data)
 
 # Menampilkan grafik (opsional)
-if not filtered_data.empty:
-    st.line_chart(filtered_data.set_index('year')['aqi_pm10'])  # Ganti 'Data' dengan kolom yang sesuai
 
 # Mengambil lokasi stasiun yang dipilih
 station_data = df_aqi[df_aqi['station'] == stasiun].iloc[0]
