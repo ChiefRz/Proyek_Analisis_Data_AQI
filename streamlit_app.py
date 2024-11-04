@@ -26,7 +26,6 @@ filtered_data = df_aqi[(df_aqi['station'] == stasiun) & (df_aqi['year'] == tahun
 # Menampilkan data
 st.title("Air Quality Index")
 st.write(f"Pada stasiun {stasiun} di tahun {tahun}:")
-st.write(filtered_data)
 
 # Menampilkan grafik (opsional)
 
