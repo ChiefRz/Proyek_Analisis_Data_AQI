@@ -20,6 +20,9 @@ st.sidebar.title("Filter Data")
 stasiun = st.sidebar.selectbox("Pilih Stasiun", df_aqi['station'].unique())
 tahun = st.sidebar.selectbox("Pilih Tahun", df_aqi['year'].unique())
 
+# Filter data berdasarkan pilihan
+filtered_data = df_aqi[(df_aqi['station'] == stasiun) & (df_aqi['year'] == tahun)]
+
 # Menampilkan data
 st.title("Air Quality Index tahun 2013 - 2016")
 
