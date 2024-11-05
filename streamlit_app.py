@@ -50,7 +50,7 @@ for index, row in data_filtered_p.iterrows():
 
 # Menampilkan peta
 st.subheader("Peta Kualitas Udara")
-st_folium(m, width=700, height=500)
+st_folium(m, width=900, height=500)
 
 # Menampilkan grafik rata-rata PM10
 col1, col2 = st.columns(2)
@@ -93,7 +93,7 @@ with col1:
                       legend_title='Tahun')
 
     # Menampilkan plot
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, width=650, height=500)
 
 with col2:
     data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
@@ -110,7 +110,7 @@ with col2:
                  color='musim') # Menambahkan label yang lebih baik
     
     # Menampilkan plot
-    st.plotly_chart(fig_musim)
+    st.plotly_chart(fig_musim, width=650, height=500)
 
 
 
