@@ -19,7 +19,7 @@ stasiun = st.sidebar.selectbox("Pilih Stasiun", df_data['station'].unique())
 tahun = st.sidebar.selectbox("Pilih Tahun", df_data['year'].unique())
 
 # Menampilkan data
-st.title("Air Quality Index tahun 2013 - 2016")
+st.head("Air Quality Index tahun 2013 - 2016")
 
 # Mengambil lokasi stasiun yang dipilih
 AQI_df = df_data.dropna(subset=['kualitas_udara'])
@@ -50,12 +50,14 @@ for index, row in data_filtered_p.iterrows():
 
 # Menampilkan peta
 st.subheader("Peta Kualitas Udara")
-st_folium(m, width=700, height=500)
+st_folium(m)
 
 # Menampilkan grafik rata-rata PM10
-st.subheader(f'Grafik Rata-Rata PM10 di Stasiun {stasiun} pada Tahun {tahun}')
+st.subheader()
+col1, col2 = st.columns(2)
 
-# Filter data untuk grafik PM10
+with col1:
+    # Filter data untuk grafik PM10
 data_grouped = all_data.dropna(subset=['month', 'PM10', 'musim'])
 rata_rata_pm10 = data_grouped[data_grouped['station'] == stasiun]
 
@@ -94,9 +96,8 @@ fig.update_layout(title=f'Rata-Rata PM10 setiap bulan di stasiun {stasiun} pada 
 # Menampilkan plot
 st.plotly_chart(fig)
 
-st.subheader(f'Grafik Rata-Rata PM10 tiap musim di Stasiun {stasiun} pada Tahun {tahun}')
-
-data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
+with col2:
+    data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
 # Grouping dan menghitung rata-rata SO2
 rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
 
@@ -110,3 +111,6 @@ fig_musim = px.bar(rata_rata_musim,
 
 # Menampilkan plot
 st.plotly_chart(fig_musim)
+
+
+
