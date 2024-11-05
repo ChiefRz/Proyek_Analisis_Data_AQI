@@ -50,7 +50,7 @@ for index, row in data_filtered_p.iterrows():
 
 # Menampilkan peta
 st.subheader("Peta Kualitas Udara")
-st_folium(m)
+st_folium(m, width=700, height=500)
 
 # Menampilkan grafik rata-rata PM10
 st.subheader()
@@ -76,14 +76,14 @@ with col1:
             trace.line.width = thick_line_width
         else:
             trace.line.width = default_line_width
-
+    
     # Alternatif menggunakan update_traces
     fig.update_traces(line=dict(width=default_line_width))  # Set default line width
     fig.update_traces(selector=dict(name=thick_year), line=dict(width=thick_line_width))  # Set thick line
-    
+
     # Atur sumbu x sebagai tipe data kategorikal
     fig.update_xaxes(type='category')
-    
+
     # Atur label pada sumbu x
     fig.update_xaxes(ticktext=rata_rata_pm10['month'].unique(), tickvals=rata_rata_pm10['month'].unique())
     
@@ -92,15 +92,16 @@ with col1:
                       yaxis_title='Rata-Rata PM10',
                       xaxis_title='Bulan',
                       legend_title='Tahun')
-    
+
     # Menampilkan plot
     st.plotly_chart(fig)
 
 with col2:
     data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
+    
     # Grouping dan menghitung rata-rata SO2
     rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
-    
+
     # Membuat plot dengan warna berbeda untuk stasiun yang disoroti
     fig_musim = px.bar(rata_rata_musim,
                  x='musim',
