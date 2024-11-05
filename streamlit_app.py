@@ -64,7 +64,7 @@ fig = px.line(rata_rata_pm10, x='month', y='PM10', color='year',
               color_discrete_sequence=px.colors.qualitative.Set3)
 
 # Menentukan stasiun yang ingin diberi ketebalan garis berbeda
-thick_year == tahun
+thick_year = tahun
 thick_line_width = 5
 default_line_width = 2
 
@@ -89,3 +89,20 @@ fig.update_layout(title=f'Rata-Rata PM10 setiap bulan di stasiun {stasiun} pada 
 
 # Menampilkan plot
 st.plotly_chart(fig)
+
+st.subheader(f'Grafik Rata-Rata PM10 tiap musim di Stasiun {stasiun} pada Tahun {tahun}')
+
+data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
+# Grouping dan menghitung rata-rata SO2
+rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
+
+# Membuat plot dengan warna berbeda untuk stasiun yang disoroti
+fig = px.bar(rata_rata_musim,
+             x='musim',
+             y='PM10',
+             title=f'Rata-rata PM10 per Musim Tahun {year2} di stasiun {station_name2}',
+             labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
+             color='musim') # Menambahkan label yang lebih baik
+
+# Menampilkan plot
+fig.show()
