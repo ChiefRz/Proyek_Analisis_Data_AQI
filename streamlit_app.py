@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import plotly.express as px
 import folium
 from streamlit_folium import st_folium
-
 
 # Membaca data
 all_data = pd.read_csv('all_data/AQI_all_df.csv')
@@ -32,6 +29,7 @@ m = folium.Map(location=location, zoom_start=12, tiles='CartoDB positron')
 
 # Menambahkan marker ke peta berdasarkan DataFrame
 for index, row in data_filtered_p.iterrows():
+    # Menentukan warna berdasarkan kualitas udara
     if row['kualitas_udara'] == 'Baik':
         color = 'green'
     elif row['kualitas_udara'] == 'Sedang':
@@ -39,7 +37,10 @@ for index, row in data_filtered_p.iterrows():
     else:  # 'Buruk'
         color = 'red'
 
-    popup_text = f"Station: {row['station']}<br>Tahun: {row['year']}<br>Indeks Kualitas Udara: {row['kualitas_udara']}<br>Rata-Rata PM10/Tahun: {row['aqi_pm10']}"
+    popup_text = (f"Station: {row['station']}<br>"
+                  f"Tahun: {row['year']}<br>"
+                  f"Indeks Kualitas Udara: {row['kualitas_udara']}<br>"
+                  f"Rata-Rata PM10/Tahun: {row['aqi_pm10']}")
 
     folium.Marker(
         location=[row['latitude'], row['longitude']],
@@ -50,71 +51,50 @@ for index, row in data_filtered_p.iterrows():
 
 # Menampilkan peta
 st.subheader("Peta Kualitas Udara")
-st_folium(m, width=1200, height=500)
+st_folium(m, width=700, height=500)
 
 # Menampilkan grafik rata-rata PM10
-col1, col2 = st.columns([3,3])
+data_grouped = all_data.dropna(subset=['month', 'PM10', 'musim'])
+rata_rata_pm10 = data_grouped[data_grouped['station'] == stasiun]
 
-with col1:
-    # Filter data untuk grafik PM10
-    data_grouped = all_data.dropna(subset=['month', 'PM10', 'musim'])
-    rata_rata_pm10 = data_grouped[data_grouped['station'] == stasiun]
-    
-    # Membuat grafik garis
-    fig = px.line(rata_rata_pm10, x='month', y='PM10', color='year',
+# Membuat grafik garis
+fig = px.line(rata_rata_pm10, x='month', y='PM10', color='year',
               color_discrete_sequence=px.colors.qualitative.Set3)
-    
-    # Menentukan stasiun yang ingin diberi ketebalan garis berbeda
-    thick_year = str(tahun)
-    thick_line_width = 5
-    default_line_width = 2
-    
-    # Mengupdate ketebalan garis
-    for trace in fig.data:
-        if str(trace.name) == thick_year:  # Pastikan keduanya adalah string
-            trace.line.width = thick_line_width
-        else:
-            trace.line.width = default_line_width
-    
-    # Alternatif menggunakan update_traces
-    fig.update_traces(line=dict(width=default_line_width))  # Set default line width
-    fig.update_traces(selector=dict(name=thick_year), line=dict(width=thick_line_width))  # Set thick line
 
-    # Atur sumbu x sebagai tipe data kategorikal
-    fig.update_xaxes(type='category')
+# Menentukan stasiun yang ingin diberi ketebalan garis berbeda
+thick_year = str(tahun)
+thick_line_width = 5
+default_line_width = 2
 
-    # Atur label pada sumbu x
-    fig.update_xaxes(ticktext=rata_rata_pm10['month'].unique(), tickvals=rata_rata_pm10['month'].unique())
-    
-    # Menambahkan judul dan label
-    fig.update_layout(title=f'Rata-Rata PM10 setiap bulan di stasiun {stasiun} pada tahun {tahun}',
-                      yaxis_title='Rata-Rata PM10',
-                      xaxis_title='Bulan',
-                      legend_title='Tahun',
-                      width=650, 
-                      height=500)
+# Mengupdate ketebalan garis
+fig.update_traces(line=dict(width=default_line_width))  # Set default line width
+fig.update_traces(selector=dict(name=thick_year), line=dict(width=thick_line_width))  # Set thick line
 
-    # Menampilkan plot
-    st.plotly_chart(fig, use_container_width=True)
+# Atur sumbu x sebagai tipe data kategorikal
+fig.update_xaxes(type='category', ticktext=rata_rata_pm10['month'].unique(), tickvals=rata_rata_pm10['month'].unique())
 
-with col2:
-    data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
-    
-    # Grouping dan menghitung rata-rata SO2
-    rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
+# Menambahkan judul dan label
+fig.update_layout(title=f'Rata-Rata PM10 setiap bulan di stasiun {stasiun} pada tahun {tahun}',
+                  yaxis_title='Rata-Rata PM10',
+                  xaxis_title='Bulan',
+                  legend_title='Tahun')
 
-    # Membuat plot dengan warna berbeda untuk stasiun yang disoroti
-    fig_musim = px.bar(rata_rata_musim,
-                       x='musim',
-                       y='PM10',
-                       title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
-                       labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
-                       color='musim',
-                       width=650,
-                       height=500)
-    
-    # Menampilkan plot
-    st.plotly_chart(fig_musim, use_container_width=True)
+# Menampilkan plot
+st.plotly_chart(fig)
 
+# Menampilkan grafik rata-rata PM10 per musim
+data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
 
+# Grouping dan menghitung rata-rata PM10 per musim
+rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
 
+# Membuat plot dengan warna berbeda untuk stasiun yang disor oti
+fig_musim = px.bar(rata_rata_musim,
+                   x='musim',
+                   y='PM10',
+                   title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
+                   labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
+                   color='musim')
+
+# Menampilkan plot
+st.plotly_chart(fig_musim)
