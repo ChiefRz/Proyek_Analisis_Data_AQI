@@ -8,7 +8,7 @@ from streamlit_folium import st_folium
 
 
 # Membaca data
-all_data = pd.read_csv('all_data/data_grouped.csv')
+all_data = pd.read_csv('all_data/AQI_all_data.csv')
 
 # Membuat DataFrame
 df_data = pd.DataFrame(all_data)
