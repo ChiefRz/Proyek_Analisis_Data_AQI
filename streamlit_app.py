@@ -50,7 +50,7 @@ for index, row in data_filtered_p.iterrows():
 
 # Menampilkan peta
 st.subheader("Peta Kualitas Udara")
-st_folium(m, width=900, height=500)
+st_folium(m, width=1200, height=500)
 
 # Menampilkan grafik rata-rata PM10
 col1, col2 = st.columns(2)
