@@ -9,25 +9,21 @@ from streamlit_folium import st_folium
 
 # Membaca data
 all_data = pd.read_csv('all_data/data_grouped.csv')
-aqi_data = pd.read_csv('all_data/AQI_df.csv')
 
 # Membuat DataFrame
 df_data = pd.DataFrame(all_data)
-df_aqi = pd.DataFrame(aqi_data)
 
 # Sidebar untuk memilih stasiun dan tahun
 st.sidebar.title("Filter Data")
-stasiun = st.sidebar.selectbox("Pilih Stasiun", df_aqi['station'].unique())
-tahun = st.sidebar.selectbox("Pilih Tahun", df_aqi['year'].unique())
-
-# Filter data berdasarkan pilihan
-filtered_data = df_aqi[(df_aqi['station'] == stasiun) & (df_aqi['year'] == tahun)]
+stasiun = st.sidebar.selectbox("Pilih Stasiun", df_data['station'].unique())
+tahun = st.sidebar.selectbox("Pilih Tahun", df_data['year'].unique())
 
 # Menampilkan data
 st.title("Air Quality Index tahun 2013 - 2016")
 
 # Mengambil lokasi stasiun yang dipilih
-station_data = df_aqi[df_aqi['station'] == stasiun].iloc[0]
+AQI_df = df_data.dropna(subset=['kualitas_udara'])
+station_data = AQI_df[AQI_df['station'] == stasiun].iloc[0]
 location = [station_data['latitude'], station_data['longitude']]
 
 # Membuat peta dengan lokasi stasiun yang dipilih
@@ -59,7 +55,8 @@ st_folium(m, width=700, height=500)
 st.subheader(f'Grafik Rata-Rata PM10 di Stasiun {stasiun} pada Tahun {tahun}')
 
 # Filter data untuk grafik PM10
-rata_rata_pm10 = df_data[df_data['station'] == stasiun]
+data_grouped = all_data.dropna(subset=['month', 'PM10', 'musim'])
+rata_rata_pm10 = data_grouped[data_grouped['station'] == stasiun]
 
 # Membuat grafik garis
 fig = px.line(rata_rata_pm10, x='month', y='PM10', color='year',
