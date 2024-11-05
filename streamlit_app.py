@@ -75,6 +75,10 @@ for trace in fig.data:
     else:
         trace.line.width = default_line_width
 
+# Alternatif menggunakan update_traces
+fig.update_traces(line=dict(width=default_line_width))  # Set default line width
+fig.update_traces(selector=dict(name=thick_year), line=dict(width=thick_line_width))  # Set thick line
+
 # Atur sumbu x sebagai tipe data kategorikal
 fig.update_xaxes(type='category')
 
