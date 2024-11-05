@@ -23,6 +23,7 @@ st.title("Air Quality Index tahun 2013 - 2016")
 
 # Mengambil lokasi stasiun yang dipilih
 AQI_df = df_data.dropna(subset=['kualitas_udara'])
+data_filtered_p = AQI_df[AQI_df['year'] == tahun]
 station_data = AQI_df[AQI_df['station'] == stasiun].iloc[0]
 location = [station_data['latitude'], station_data['longitude']]
 
@@ -30,7 +31,7 @@ location = [station_data['latitude'], station_data['longitude']]
 m = folium.Map(location=location, zoom_start=12, tiles='CartoDB positron')
 
 # Menambahkan marker ke peta berdasarkan DataFrame
-for index, row in AQI_df.iterrows():
+for index, row in data_filtered_p.iterrows():
     if row['kualitas_udara'] == 'Baik':
         color = 'green'
     elif row['kualitas_udara'] == 'Sedang':
