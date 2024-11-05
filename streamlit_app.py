@@ -100,9 +100,9 @@ rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean
 fig = px.bar(rata_rata_musim,
              x='musim',
              y='PM10',
-             title=f'Rata-rata PM10 per Musim Tahun {year2} di stasiun {station_name2}',
+             title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
              labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
              color='musim') # Menambahkan label yang lebih baik
 
 # Menampilkan plot
-fig.show()
+st.plotly_chart(fig_musim)
