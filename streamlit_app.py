@@ -90,10 +90,12 @@ with col1:
     fig.update_layout(title=f'Rata-Rata PM10 setiap bulan di stasiun {stasiun} pada tahun {tahun}',
                       yaxis_title='Rata-Rata PM10',
                       xaxis_title='Bulan',
-                      legend_title='Tahun')
+                      legend_title='Tahun',
+                      width=650, 
+                      height=500)
 
     # Menampilkan plot
-    st.plotly_chart(fig, width=650, height=500)
+    st.plotly_chart(fig)
 
 with col2:
     data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
@@ -103,14 +105,16 @@ with col2:
 
     # Membuat plot dengan warna berbeda untuk stasiun yang disoroti
     fig_musim = px.bar(rata_rata_musim,
-                 x='musim',
-                 y='PM10',
-                 title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
-                 labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
-                 color='musim') # Menambahkan label yang lebih baik
+                       x='musim',
+                       y='PM10',
+                       title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
+                       labels={'musim': 'Musim', 'PM10': 'Rata-rata PM10'},
+                       color='musim',
+                       width=650,
+                       height=500)
     
     # Menampilkan plot
-    st.plotly_chart(fig_musim, width=650, height=500)
+    st.plotly_chart(fig_musim)
 
 
 
