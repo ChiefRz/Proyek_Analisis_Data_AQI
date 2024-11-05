@@ -53,7 +53,7 @@ st.subheader("Peta Kualitas Udara")
 st_folium(m, width=1200, height=500)
 
 # Menampilkan grafik rata-rata PM10
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([3,3])
 
 with col1:
     # Filter data untuk grafik PM10
