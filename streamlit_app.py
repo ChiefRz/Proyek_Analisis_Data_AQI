@@ -64,13 +64,13 @@ fig = px.line(rata_rata_pm10, x='month', y='PM10', color='year',
               color_discrete_sequence=px.colors.qualitative.Set3)
 
 # Menentukan stasiun yang ingin diberi ketebalan garis berbeda
-thick_year = tahun
+thick_year = str(tahun)
 thick_line_width = 5
 default_line_width = 2
 
 # Mengupdate ketebalan garis
 for trace in fig.data:
-    if trace.name == thick_year:
+    if str(trace.name) == thick_year:  # Pastikan keduanya adalah string
         trace.line.width = thick_line_width
     else:
         trace.line.width = default_line_width
