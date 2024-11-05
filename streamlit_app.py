@@ -30,7 +30,7 @@ location = [station_data['latitude'], station_data['longitude']]
 m = folium.Map(location=location, zoom_start=12, tiles='CartoDB positron')
 
 # Menambahkan marker ke peta berdasarkan DataFrame
-for index, row in df_aqi.iterrows():
+for index, row in AQI_df.iterrows():
     if row['kualitas_udara'] == 'Baik':
         color = 'green'
     elif row['kualitas_udara'] == 'Sedang':
