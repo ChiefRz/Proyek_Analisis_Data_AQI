@@ -95,7 +95,7 @@ with col1:
                       height=500)
 
     # Menampilkan plot
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 with col2:
     data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_grouped['station'] == stasiun)]
@@ -114,7 +114,7 @@ with col2:
                        height=500)
     
     # Menampilkan plot
-    st.plotly_chart(fig_musim)
+    st.plotly_chart(fig_musim, use_container_width=True)
 
 
 
