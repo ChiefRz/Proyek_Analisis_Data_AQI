@@ -97,7 +97,7 @@ data_filtered_musim = data_grouped[(data_grouped['year'] == tahun) & (data_group
 rata_rata_musim = data_filtered_musim.groupby(['station', 'musim'])['PM10'].mean().reset_index()
 
 # Membuat plot dengan warna berbeda untuk stasiun yang disoroti
-fig = px.bar(rata_rata_musim,
+fig_musim = px.bar(rata_rata_musim,
              x='musim',
              y='PM10',
              title=f'Rata-rata PM10 per Musim Tahun {tahun} di stasiun {stasiun}',
